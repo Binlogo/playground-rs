@@ -1,4 +1,4 @@
-static feedback: f64 = 0.5;
+use super::delay_line::DelayLine;
 pub struct AllPass {
     delay_line: DelayLine,
 }
@@ -13,8 +13,7 @@ impl AllPass {
     pub fn tick(&mut self, input: f64) -> f64 {
         let delayed = self.delay_line.read();
         let output = -input + delayed;
-        self.delay_line
-            .write_and_advance(input + delayed * feedback);
+        self.delay_line.write_and_advance(input + delayed * 0.5);
         output
     }
 }

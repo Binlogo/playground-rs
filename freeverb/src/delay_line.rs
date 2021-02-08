@@ -25,15 +25,19 @@ impl DelayLine {
         }
     }
 }
-
-#[test]
-fn length_10() {
-    let mut line = DelayLine::new(10);
-    for i in 0..10 {
-        assert_eq!(line.read(), 0);
-        line.write_and_advance(i);
-    }
-    for i in 0..10 {
-        assert_eq!(line.read(), i);
+#[cfg(test)]
+mod tests {
+    use super::DelayLine;
+    #[test]
+    fn length_10() {
+        let mut line = DelayLine::new(10);
+        for i in 0..10 {
+            assert_eq!(line.read(), 0.0);
+            line.write_and_advance(i as f64);
+        }
+        for i in 0..10 {
+            assert_eq!(line.read(), i as f64);
+            line.write_and_advance(0.0);
+        }
     }
 }
