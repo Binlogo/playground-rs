@@ -1,5 +1,6 @@
 [workspace]
 members = [
-  "src/freeverb",
-  "examples/app_gtk",
+  "audio_module",
+  "freeverb",
+  "freeverb_module",
 ]
