@@ -1,7 +1,9 @@
 pub mod parameter;
+pub mod string_converter;
 pub mod value_converter;
 
 pub use self::parameter::*;
+pub use self::string_converter::*;
 pub use self::value_converter::*;
 
 pub enum Command {

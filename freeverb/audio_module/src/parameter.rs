@@ -13,6 +13,10 @@ pub trait Parameter {
     fn make_value_converter(&self) -> Box<dyn ValueConverter> {
         Box::new(DefaultValueConverter::new())
     }
+
+    fn make_string_converter(&self) -> Box<dyn StringConverter> {
+        Box::new(DefaultStringConverter {})
+    }
 }
 
 pub struct BoolParameter {

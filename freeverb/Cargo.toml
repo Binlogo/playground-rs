@@ -3,4 +3,5 @@ members = [
   "audio_module",
   "freeverb",
   "freeverb_module",
+  "examples/app_gtk",
 ]
