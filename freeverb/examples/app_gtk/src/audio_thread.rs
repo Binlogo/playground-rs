@@ -60,7 +60,7 @@ pub fn start_audio<Module: AudioModule>(
             &stream_config,
             move |data: &mut [f32], _info: &cpal::OutputCallbackInfo| {
                 // println!("output buffer");
-                debug_assert!(data.len() == SAMPLES_PER_BUFFER);
+                // debug_assert!(data.len() == SAMPLES_PER_BUFFER);
 
                 let consumed = from_input.pop_slice(data);
 

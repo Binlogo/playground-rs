@@ -9,7 +9,7 @@ pub fn make_toggle(
     id: usize,
     command_sender: crossbeam_channel::Sender<Command>,
 ) -> gtk::Box {
-    let button = ToggleButton::new_with_label(parameter.name().as_str());
+    let button = ToggleButton::with_label(parameter.name().as_str());
     button.set_active(parameter.default_user_value() != 0.0);
     button.connect_toggled(move |button| {
         command_sender
