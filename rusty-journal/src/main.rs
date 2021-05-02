@@ -1,5 +1,7 @@
 mod cli;
 mod tasks;
+use std::path::PathBuf;
+
 use structopt::StructOpt;
 
 use cli::{Action::*, CommandLineArgs};
@@ -11,7 +13,9 @@ fn main() {
         journal_file,
     } = cli::CommandLineArgs::from_args();
 
-    let journal_file = journal_file.unwrap_or("rusty-journal.json".into());
+    let journal_file = journal_file
+        .or_else(default_journal_file)
+        .expect("Failed to find journal file.");
 
     match action {
         Add { text } => add_task(journal_file, Task::new(text)),
@@ -19,4 +23,11 @@ fn main() {
         List => list_tasks(journal_file),
     }
     .expect("Failed to perform action");
+}
+
+fn default_journal_file() -> Option<PathBuf> {
+    home::home_dir().map(|mut path| {
+        path.push(".rusty-journal.json");
+        path
+    })
 }
