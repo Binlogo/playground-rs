@@ -4,10 +4,11 @@ use std::path::PathBuf;
 
 use structopt::StructOpt;
 
+use anyhow::anyhow;
 use cli::{Action::*, CommandLineArgs};
 use tasks::*;
 
-fn main() {
+fn main() -> anyhow::Result<()> {
     let CommandLineArgs {
         action,
         journal_file,
@@ -15,14 +16,15 @@ fn main() {
 
     let journal_file = journal_file
         .or_else(default_journal_file)
-        .expect("Failed to find journal file.");
+        .ok_or(anyhow!("Failed to find journal file."))?;
 
     match action {
         Add { text } => add_task(journal_file, Task::new(text)),
         Done { position } => complete_task(journal_file, position),
         List => list_tasks(journal_file),
-    }
-    .expect("Failed to perform action");
+    }?;
+
+    Ok(())
 }
 
 fn default_journal_file() -> Option<PathBuf> {
