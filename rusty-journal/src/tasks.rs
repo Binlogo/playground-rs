@@ -1,8 +1,8 @@
 use chrono::{serde::ts_seconds, DateTime, Local, Utc};
 use serde::{Deserialize, Serialize};
-use std::io::{BufReader, Result, Seek, SeekFrom};
+use std::fmt;
+use std::io::{Result, Seek, SeekFrom};
 use std::path::PathBuf;
-use std::{fmt, fs::write};
 use std::{fs::OpenOptions, io::Error};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -76,7 +76,7 @@ pub fn list_tasks(journal_path: PathBuf) -> Result<()> {
 
 fn parse_tasks(file: &mut std::fs::File) -> Result<Vec<Task>> {
     file.seek(SeekFrom::Start(0))?;
-    let mut tasks: Vec<Task> = match serde_json::from_reader(&*file) {
+    let tasks: Vec<Task> = match serde_json::from_reader(&*file) {
         Ok(tasks) => tasks,
         Err(err) if err.is_eof() => Vec::new(),
         Err(err) => Err(err)?,

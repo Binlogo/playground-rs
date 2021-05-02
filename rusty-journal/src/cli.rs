@@ -7,7 +7,7 @@ pub enum Action {
     Add {
         /// Task description
         #[structopt()]
-        task: String,
+        text: String,
     },
     /// Complete a task, remove by position
     Done {
