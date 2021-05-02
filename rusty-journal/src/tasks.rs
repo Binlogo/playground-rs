@@ -2,6 +2,7 @@ use chrono::{serde::ts_seconds, DateTime, Local, Utc};
 use serde::{Deserialize, Serialize};
 use std::io::{BufReader, Result, Seek, SeekFrom};
 use std::path::PathBuf;
+use std::{fmt, fs::write};
 use std::{fs::OpenOptions, io::Error};
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -15,6 +16,13 @@ impl Task {
     pub fn new(text: String) -> Self {
         let created_at = Utc::now();
         Task { text, created_at }
+    }
+}
+
+impl fmt::Display for Task {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let created_at = self.created_at.with_timezone(&Local).format("%F %H:%M");
+        write!(f, "{:<50} [{}]", self.text, created_at)
     }
 }
 
@@ -50,7 +58,20 @@ pub fn complete_task(journal_path: PathBuf, task_position: usize) -> Result<()> 
 }
 
 pub fn list_tasks(journal_path: PathBuf) -> Result<()> {
-    unimplemented!()
+    let mut file = OpenOptions::new().read(true).open(journal_path)?;
+    let tasks = parse_tasks(&mut file)?;
+
+    if tasks.is_empty() {
+        println!("Task list is empty");
+    } else {
+        let mut order = 1;
+        for task in tasks {
+            println!("{}: {}", order, task);
+            order += 1;
+        }
+    }
+
+    Ok(())
 }
 
 fn parse_tasks(file: &mut std::fs::File) -> Result<Vec<Task>> {
